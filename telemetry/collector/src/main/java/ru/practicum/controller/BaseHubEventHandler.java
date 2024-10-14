@@ -5,23 +5,23 @@ import lombok.extern.slf4j.Slf4j;
 import org.apache.avro.specific.SpecificRecordBase;
 import ru.practicum.config.KafkaEventProducer;
 import ru.practicum.config.KafkaTopics;
-import ru.practicum.model.sensor.SensorEvent;
+import ru.practicum.model.hub.HubEvent;
 
-@RequiredArgsConstructor
 @Slf4j
-public abstract class BaseSensorEventHandler<T extends SpecificRecordBase> implements SensorEventHandler {
+@RequiredArgsConstructor
+public abstract class BaseHubEventHandler<T extends SpecificRecordBase> implements HubEventHandler {
 
     protected final KafkaEventProducer producer;
     protected final KafkaTopics kafkaTopics;
 
-    protected abstract T mapToAvro(SensorEvent event);
+    protected abstract T mapToAvro(HubEvent event);
 
     @Override
-    public void handle(SensorEvent event) {
+    public void handle(HubEvent event) {
         T avroEvent = mapToAvro(event);
-        String topic = kafkaTopics.getTelemetrySensors();
+        String topic = kafkaTopics.getTelemetryHubs();
 
         log.info("Отправка события {} в топик {}", getMessageType(), topic);
-        producer.send(topic, event.getId(), avroEvent);
+        producer.send(topic, event.getHubId(), avroEvent);
     }
 }

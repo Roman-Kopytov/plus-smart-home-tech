@@ -1,4 +1,4 @@
-package ru.practicum.config;
+package ru.practicum.service;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -6,6 +6,8 @@ import org.apache.avro.specific.SpecificRecordBase;
 import org.apache.kafka.clients.producer.Producer;
 import org.apache.kafka.clients.producer.ProducerRecord;
 import org.springframework.stereotype.Component;
+
+import java.time.Instant;
 
 @Component
 @RequiredArgsConstructor
@@ -15,7 +17,7 @@ public class KafkaEventProducer {
 
     public <T extends SpecificRecordBase> void send(String topic, String key, T event) {
         ProducerRecord<String, SpecificRecordBase> record =
-                new ProducerRecord<>(topic, key, event);
+                new ProducerRecord<>(topic, 1, Instant.now().getEpochSecond(), key, event);
 
         kafkaProducer.send(record, (metadata, exception) -> {
             if (exception != null) {

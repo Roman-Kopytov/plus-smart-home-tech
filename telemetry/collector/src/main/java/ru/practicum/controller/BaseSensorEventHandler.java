@@ -3,9 +3,9 @@ package ru.practicum.controller;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.avro.specific.SpecificRecordBase;
-import ru.practicum.service.KafkaEventProducer;
 import ru.practicum.config.KafkaTopicsProperties;
-import ru.practicum.model.sensor.SensorEvent;
+import ru.practicum.service.KafkaEventProducer;
+import ru.yandex.practicum.grpc.telemetry.event.SensorEventProto;
 
 @RequiredArgsConstructor
 @Slf4j
@@ -14,10 +14,10 @@ public abstract class BaseSensorEventHandler<T extends SpecificRecordBase> imple
     protected final KafkaEventProducer producer;
     protected final KafkaTopicsProperties kafkaTopics;
 
-    protected abstract T mapToAvro(SensorEvent event);
+    protected abstract T mapToAvro(SensorEventProto event);
 
     @Override
-    public void handle(SensorEvent event) {
+    public void handle(SensorEventProto event) {
         T avroEvent = mapToAvro(event);
         String topic = kafkaTopics.getTelemetrySensors();
 

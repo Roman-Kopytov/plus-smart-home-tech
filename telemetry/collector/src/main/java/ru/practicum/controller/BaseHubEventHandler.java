@@ -3,9 +3,9 @@ package ru.practicum.controller;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.avro.specific.SpecificRecordBase;
-import ru.practicum.service.KafkaEventProducer;
 import ru.practicum.config.KafkaTopicsProperties;
 import ru.practicum.model.hub.HubEvent;
+import ru.practicum.service.KafkaEventProducer;
 
 @Slf4j
 @RequiredArgsConstructor

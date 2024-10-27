@@ -15,17 +15,17 @@ import java.time.Instant;
 public class KafkaEventProducer {
     private final Producer<String, SpecificRecordBase> kafkaProducer;
 
-    public <T extends SpecificRecordBase> void send(String topic, String key, T event) {
-        ProducerRecord<String, SpecificRecordBase> record =
-                new ProducerRecord<>(topic, 1, Instant.now().getEpochSecond(), key, event);
+        public <T extends SpecificRecordBase> void send(String topic, String key, T event) {
+            ProducerRecord<String, SpecificRecordBase> record =
+                    new ProducerRecord<>(topic, 1, Instant.now().getEpochSecond(), key, event);
 
-        kafkaProducer.send(record, (metadata, exception) -> {
-            if (exception != null) {
-                log.error("Ошибка при отправке сообщения в Kafka, topic: {}, key: {}", topic, key, exception);
-            } else {
-                log.info("Сообщение успешно отправлено в Kafka, topic: {}, partition: {}, offset: {}",
-                        metadata.topic(), metadata.partition(), metadata.offset());
-            }
-        });
-    }
+            kafkaProducer.send(record, (metadata, exception) -> {
+                if (exception != null) {
+                    log.error("Ошибка при отправке сообщения в Kafka, topic: {}, key: {}", topic, key, exception);
+                } else {
+                    log.info("Сообщение успешно отправлено в Kafka, topic: {}, partition: {}, offset: {}",
+                            metadata.topic(), metadata.partition(), metadata.offset());
+                }
+            });
+        }
 }

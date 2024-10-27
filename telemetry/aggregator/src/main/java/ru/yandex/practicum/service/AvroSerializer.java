@@ -1,4 +1,4 @@
-package ru.practicum.config;
+package ru.yandex.practicum.service;
 
 import org.apache.avro.generic.GenericRecord;
 import org.apache.avro.io.BinaryEncoder;

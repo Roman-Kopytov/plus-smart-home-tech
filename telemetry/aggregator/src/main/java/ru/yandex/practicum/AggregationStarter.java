@@ -52,7 +52,6 @@ public class AggregationStarter {
         } catch (Exception e) {
             log.error("Ошибка во время обработки событий от датчиков", e);
         } finally {
-
             try {
                 producer.flush();
                 consumer.commitSync(currentOffsets);

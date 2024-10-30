@@ -17,14 +17,14 @@ CREATE TABLE IF NOT EXISTS conditions
     id        BIGINT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
     type      VARCHAR,
     operation VARCHAR,
-    condition_value     INTEGER
+    value     INTEGER
 );
 
 CREATE TABLE IF NOT EXISTS actions
 (
     id    BIGINT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
     type  VARCHAR,
-    action_value INTEGER
+    value INTEGER
 );
 
 

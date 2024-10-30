@@ -1,5 +1,9 @@
 package ru.yandex.practicum.model;
 
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.Id;
+import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -9,7 +13,13 @@ import lombok.Setter;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
+@Entity
+@Table(name = "sensors")
 public class Sensor {
-    private Long id;
-    private Long hubId;
+    @Id
+    private String id;
+
+    @Column(name = "hub_id")
+    private String hubId;
+
 }

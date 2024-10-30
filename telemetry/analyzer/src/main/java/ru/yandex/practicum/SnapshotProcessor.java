@@ -5,9 +5,12 @@ import org.springframework.stereotype.Component;
 
 @Slf4j
 @Component
-public class SnapshotProcessor implements Runnable{
+public class SnapshotProcessor implements Runnable {
+    private final AnalyzerService analyzerProcessor;
+
     @Override
     public void run() {
+        log.info("Snapshot processor started");
 
     }
 }

@@ -14,7 +14,8 @@ import java.util.Map;
 @ConfigurationProperties(prefix = "spring.kafka.consumer")
 public class KafkaProperties {
     private String bootstrapServers;
-    private int pollTimeout;
+    private long pollDuration;
+    private int messageFixTime;
     private String schemaRegistryUrl;
     private String keyDeserializer;
     private Map<String, String> valueDeserializers;

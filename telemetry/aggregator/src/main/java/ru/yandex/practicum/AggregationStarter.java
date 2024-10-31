@@ -16,6 +16,7 @@ import ru.yandex.practicum.kafka.telemetry.event.SensorEventAvro;
 import ru.yandex.practicum.kafka.telemetry.event.SensorStateAvro;
 import ru.yandex.practicum.kafka.telemetry.event.SensorsSnapshotAvro;
 
+import java.time.Duration;
 import java.time.Instant;
 import java.util.HashMap;
 import java.util.List;
@@ -44,11 +45,12 @@ public class AggregationStarter {
     }
 
     public void start() {
+        log.info("Aggregation started");
         Runtime.getRuntime().addShutdownHook(new Thread(consumer::wakeup));
         try {
             consumer.subscribe(List.of(kafkaTopics.getTelemetrySensors()));
             while (true) {
-                ConsumerRecords<String, SensorEventAvro> records = consumer.poll(POLL_DURATION);
+                ConsumerRecords<String, SensorEventAvro> records = consumer.poll(Duration.ofMillis(POLL_DURATION));
                 int count = 0;
                 for (ConsumerRecord<String, SensorEventAvro> record : records) {
                     handleRecord(record);

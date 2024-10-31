@@ -1,5 +1,6 @@
 package ru.yandex.practicum;
 
+import jakarta.annotation.PostConstruct;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.kafka.clients.consumer.Consumer;
@@ -12,6 +13,7 @@ import ru.yandex.practicum.kafka.telemetry.event.*;
 import ru.yandex.practicum.service.ScenarioService;
 import ru.yandex.practicum.service.SensorService;
 
+import java.time.Duration;
 import java.util.List;
 
 @Slf4j
@@ -20,18 +22,24 @@ import java.util.List;
 public class HubEventProcessor implements Runnable {
 
     private final Consumer<String, HubEventAvro> consumer;
-    private final KafkaProperties properties;
+    private final KafkaProperties kafkaProperties;
     private final SensorService sensorService;
     private final ScenarioService scenarioService;
+    private static long POLL_DURATION;
+
+    @PostConstruct
+    private void init() {
+        POLL_DURATION = kafkaProperties.getPollDuration();
+    }
 
     @Override
     public void run() {
         log.info("HubEventProcessor processor started");
         Runtime.getRuntime().addShutdownHook(new Thread(consumer::wakeup));
         try {
-            consumer.subscribe(List.of(properties.getTopics().get("telemetry-hubs")));
+            consumer.subscribe(List.of(kafkaProperties.getTopics().get("telemetry-hubs")));
             while (true) {
-                ConsumerRecords<String, HubEventAvro> records = consumer.poll(properties.getPollTimeout());
+                ConsumerRecords<String, HubEventAvro> records = consumer.poll(Duration.ofMillis(POLL_DURATION));
                 for (ConsumerRecord<String, HubEventAvro> record : records) {
                     sendToService(record);
                 }

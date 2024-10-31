@@ -14,7 +14,6 @@ spring:
 
   kafka:
     consumer:
-      pollTimeout: 100
       bootstrap-servers: localhost:9092
       properties:
         schema:
@@ -31,6 +30,8 @@ spring:
         telemetry-snapshots: snapshot-group
         telemetry-hubs: hubs-group
       auto-offset-reset: earliest
+      poll-duration: 100
+      message-fix-time: 50
 
 grpc:
   client:

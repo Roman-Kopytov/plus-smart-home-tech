@@ -1,5 +1,6 @@
 package ru.yandex.practicum;
 
+import jakarta.annotation.PostConstruct;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.kafka.clients.consumer.Consumer;
@@ -15,7 +16,6 @@ import ru.yandex.practicum.kafka.telemetry.event.SensorEventAvro;
 import ru.yandex.practicum.kafka.telemetry.event.SensorStateAvro;
 import ru.yandex.practicum.kafka.telemetry.event.SensorsSnapshotAvro;
 
-import java.time.Duration;
 import java.time.Instant;
 import java.util.HashMap;
 import java.util.List;
@@ -27,19 +27,28 @@ import java.util.Optional;
 @RequiredArgsConstructor
 @Slf4j
 public class AggregationStarter {
+    private static int PERIOD_OF_MESSAGE_FIX;
+    private static long POLL_DURATION;
+    private final KafkaProperties kafkaProperties;
     private final Consumer<String, SensorEventAvro> consumer;
-    private final Producer<String, SensorEventAvro> producer;
+    private final Producer<String, SensorsSnapshotAvro> producer;
     private final KafkaTopicsProperties kafkaTopics;
-    private static final Duration CONSUME_ATTEMPT_TIMEOUT = Duration.ofMillis(1000);
     private static final Map<TopicPartition, OffsetAndMetadata> currentOffsets = new HashMap<>();
     private final Map<String, SensorsSnapshotAvro> snapshots = new HashMap<>();
+
+
+    @PostConstruct
+    private void init() {
+        POLL_DURATION = kafkaProperties.getPollDuration();
+        PERIOD_OF_MESSAGE_FIX = kafkaProperties.getMessageFixTime();
+    }
 
     public void start() {
         Runtime.getRuntime().addShutdownHook(new Thread(consumer::wakeup));
         try {
             consumer.subscribe(List.of(kafkaTopics.getTelemetrySensors()));
             while (true) {
-                ConsumerRecords<String, SensorEventAvro> records = consumer.poll(CONSUME_ATTEMPT_TIMEOUT);
+                ConsumerRecords<String, SensorEventAvro> records = consumer.poll(POLL_DURATION);
                 int count = 0;
                 for (ConsumerRecord<String, SensorEventAvro> record : records) {
                     handleRecord(record);
@@ -71,7 +80,7 @@ public class AggregationStarter {
                 new OffsetAndMetadata(record.offset() + 1)
         );
 
-        if (count % 10 == 0) {
+        if (count % PERIOD_OF_MESSAGE_FIX == 0) {
             consumer.commitAsync(currentOffsets, (offsets, exception) -> {
                 if (exception != null) {
                     log.warn("Ошибка во время фиксации оффсетов: {}", offsets, exception);
@@ -88,8 +97,7 @@ public class AggregationStarter {
 
             String topic = kafkaTopics.getTelemetrySnapshots();
             String key = sensorsSnapshot.getHubId();
-            send(topic, key, event);
-
+            send(topic, key, sensorsSnapshot);
         }
     }
 
@@ -122,9 +130,9 @@ public class AggregationStarter {
         return Optional.of(snapshot);
     }
 
-    private void send(String topic, String key, SensorEventAvro event) {
-        ProducerRecord<String, SensorEventAvro> record =
-                new ProducerRecord<>(topic, 1, Instant.now().getEpochSecond(), key, event);
+    private void send(String topic, String key, SensorsSnapshotAvro snapshot) {
+        ProducerRecord<String, SensorsSnapshotAvro> record =
+                new ProducerRecord<>(topic, null, snapshot.getTimestamp().getEpochSecond(), key, snapshot);
 
         producer.send(record, (metadata, exception) -> {
             if (exception != null) {
@@ -135,6 +143,4 @@ public class AggregationStarter {
             }
         });
     }
-
-
 }

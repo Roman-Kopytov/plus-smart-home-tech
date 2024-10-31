@@ -102,7 +102,7 @@ public class AggregationStarter {
     }
 
     private Optional<SensorsSnapshotAvro> updateState(SensorEventAvro event) {
-        String eventId = event.getId();
+        String sensorId = event.getId();
         String hubId = event.getHubId();
         Object payload = event.getPayload();
         Instant timestamp = event.getTimestamp();
@@ -113,7 +113,7 @@ public class AggregationStarter {
             snapshots.put(hubId, snapshot);
         }
 
-        SensorStateAvro oldState = snapshot.getSensorsState().get(eventId);
+        SensorStateAvro oldState = snapshot.getSensorsState().get(sensorId);
         if (oldState != null) {
 
             if (oldState.getTimestamp().isAfter(timestamp) ||
@@ -124,7 +124,7 @@ public class AggregationStarter {
         }
 
         SensorStateAvro newState = new SensorStateAvro(timestamp, payload);
-        snapshot.getSensorsState().put(eventId, newState);
+        snapshot.getSensorsState().put(sensorId, newState);
         snapshot.setTimestamp(timestamp);
 
         return Optional.of(snapshot);

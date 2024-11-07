@@ -24,8 +24,12 @@ public class KafkaConsumerConfig<T extends SpecificRecordBase> {
     public Consumer<String, T> kafkaConsumer() {
         Properties properties = new Properties();
         properties.put(ConsumerConfig.BOOTSTRAP_SERVERS_CONFIG, kafkaProperties.getBootstrapServers());
-        properties.put(ConsumerConfig.KEY_DESERIALIZER_CLASS_CONFIG, kafkaProperties.getKeyDeserializer());
-        properties.put(ConsumerConfig.VALUE_DESERIALIZER_CLASS_CONFIG, kafkaProperties.getValueDeserializer());
+        properties.put(ConsumerConfig.KEY_DESERIALIZER_CLASS_CONFIG, kafkaProperties
+                .getConsumer().getProperties().get("key-deserializer"));
+        properties.put(ConsumerConfig.VALUE_DESERIALIZER_CLASS_CONFIG, kafkaProperties
+                .getConsumer().getProperties().get("value-deserializer"));
+        properties.put(ConsumerConfig.GROUP_ID_CONFIG, kafkaProperties
+                .getConsumer().getProperties().get("group.id"));
         return new KafkaConsumer<>(properties);
     }
 }

@@ -33,22 +33,21 @@ public class AggregationStarter {
     private final KafkaProperties kafkaProperties;
     private final Consumer<String, SensorEventAvro> consumer;
     private final Producer<String, SensorsSnapshotAvro> producer;
-    private final KafkaTopicsProperties kafkaTopics;
     private static final Map<TopicPartition, OffsetAndMetadata> currentOffsets = new HashMap<>();
     private final Map<String, SensorsSnapshotAvro> snapshots = new HashMap<>();
 
 
     @PostConstruct
     private void init() {
-        POLL_DURATION = kafkaProperties.getPollDuration();
-        PERIOD_OF_MESSAGE_FIX = kafkaProperties.getMessageFixTime();
+        POLL_DURATION = kafkaProperties.getConsumer().getPollDuration();
+        PERIOD_OF_MESSAGE_FIX = kafkaProperties.getConsumer().getMessageFixTime();
     }
 
     public void start() {
         log.info("Aggregation started");
         Runtime.getRuntime().addShutdownHook(new Thread(consumer::wakeup));
         try {
-            consumer.subscribe(List.of(kafkaTopics.getTelemetrySensors()));
+            consumer.subscribe(List.of(kafkaProperties.getConsumer().getTopic()));
             while (true) {
                 ConsumerRecords<String, SensorEventAvro> records = consumer.poll(Duration.ofMillis(POLL_DURATION));
                 int count = 0;
@@ -97,7 +96,7 @@ public class AggregationStarter {
         if (sensorsSnapshotAvro.isPresent()) {
             SensorsSnapshotAvro sensorsSnapshot = sensorsSnapshotAvro.get();
 
-            String topic = kafkaTopics.getTelemetrySnapshots();
+            String topic = kafkaProperties.getProducer().getTopic();
             String key = sensorsSnapshot.getHubId();
             send(topic, key, sensorsSnapshot);
         }

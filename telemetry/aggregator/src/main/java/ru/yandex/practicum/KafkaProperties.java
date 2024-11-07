@@ -2,22 +2,33 @@ package ru.yandex.practicum;
 
 import lombok.Getter;
 import lombok.Setter;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.stereotype.Component;
+
+import java.util.Map;
 
 @Getter
 @Setter
 @Component
-@ConfigurationProperties(prefix = "spring.kafka.consumer")
+@ConfigurationProperties(prefix = "aggregator.kafka")
 public class KafkaProperties {
-    @Value("${spring.kafka.bootstrap-servers}")
     private String bootstrapServers;
-    private String valueDeserializer;
-    private String keyDeserializer;
-    private String keySerializer;
-    private String valueSerializer;
-    private long pollDuration;
-    private int messageFixTime;
+    private ProducerProperties producer;
+    private ConsumerProperties consumer;
 
+    @Getter
+    @Setter
+    public static class ProducerProperties {
+        private Map<String, String> properties;
+        private String topic;
+    }
+
+    @Getter
+    @Setter
+    public static class ConsumerProperties {
+        private Map<String, String> properties;
+        private String topic;
+        private int pollDuration;
+        private int messageFixTime;
+    }
 }

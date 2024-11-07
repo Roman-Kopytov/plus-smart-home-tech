@@ -23,8 +23,10 @@ public class KafkaProducerConfig<T extends SpecificRecordBase> {
     public Producer<String, T> kafkaProducer() {
         Properties props = new Properties();
         props.put(ProducerConfig.BOOTSTRAP_SERVERS_CONFIG, kafkaProperties.getBootstrapServers());
-        props.put(ProducerConfig.KEY_SERIALIZER_CLASS_CONFIG, kafkaProperties.getKeySerializer());
-        props.put(ProducerConfig.VALUE_SERIALIZER_CLASS_CONFIG, kafkaProperties.getValueSerializer());
+        props.put(ProducerConfig.KEY_SERIALIZER_CLASS_CONFIG, kafkaProperties
+                .getProducer().getProperties().get("key-serializer"));
+        props.put(ProducerConfig.VALUE_SERIALIZER_CLASS_CONFIG, kafkaProperties
+                .getProducer().getProperties().get("value-serializer"));
         return new KafkaProducer<>(props);
     }
 }

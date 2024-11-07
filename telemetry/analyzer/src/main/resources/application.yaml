@@ -1,0 +1,42 @@
+spring:
+  datasource:
+    url: jdbc:postgresql://localhost:5432/postgres
+    username: admin
+    password: admin
+
+  jpa:
+    hibernate:
+      ddl-auto: validate
+    show-sql: true
+    properties:
+      hibernate:
+        format_sql: true
+
+  kafka:
+    consumer:
+      bootstrap-servers: localhost:9092
+      properties:
+        schema:
+          registry:
+            url: http://localhost:8081
+      topics:
+        telemetry-hubs: telemetry.hubs.v1
+        telemetry-snapshots: telemetry.snapshots.v1
+      key-deserializer: org.apache.kafka.common.serialization.StringSerializer
+      value-deserializers:
+        telemetry-snapshots: ru.yandex.practicum.consumer.SnapshotDeserializer
+        telemetry-hubs: ru.yandex.practicum.consumer.HubEventDeserializer
+      group-id:
+        telemetry-snapshots: snapshot-group
+        telemetry-hubs: hubs-group
+      auto-offset-reset: earliest
+      poll-duration: 100
+      message-fix-time: 50
+
+grpc:
+  client:
+    hub-router:
+      address: 'static://localhost:59090'
+      enableKeepAlive: true
+      keepAliveWithoutCalls: true
+      negotiationType: plaintext

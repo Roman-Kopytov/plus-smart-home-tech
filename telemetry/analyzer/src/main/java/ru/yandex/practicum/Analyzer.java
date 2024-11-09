@@ -11,6 +11,11 @@ import org.springframework.context.ConfigurableApplicationContext;
 public class Analyzer {
     public static void main(String[] args) {
         ConfigurableApplicationContext context = SpringApplication.run(Analyzer.class, args);
+        System.out.println("Beans in context:");
+        String[] beans = context.getBeanDefinitionNames();
+        for (String bean : beans) {
+            System.out.println(bean);
+        }
         HubEventProcessor hubEventProcessor = context.getBean(HubEventProcessor.class);
         SnapshotProcessor snapshotProcessor = context.getBean(SnapshotProcessor.class);
         Thread hubEventsThread = new Thread(hubEventProcessor);

@@ -5,12 +5,10 @@ import lombok.Setter;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.stereotype.Component;
 
-import java.util.Map;
-
 @Getter
 @Setter
 @Component
-@ConfigurationProperties(prefix = "aggregator.kafka")
+@ConfigurationProperties("spring.kafka")
 public class KafkaProperties {
     private String bootstrapServers;
     private ProducerProperties producer;
@@ -19,14 +17,17 @@ public class KafkaProperties {
     @Getter
     @Setter
     public static class ProducerProperties {
-        private Map<String, String> properties;
+        private String keySerializer;
+        private String valueSerializer;
         private String topic;
     }
 
     @Getter
     @Setter
     public static class ConsumerProperties {
-        private Map<String, String> properties;
+        private String groupId;
+        private String keyDeserializer;
+        private String valueDeserializer;
         private String topic;
         private int pollDuration;
         private int messageFixTime;

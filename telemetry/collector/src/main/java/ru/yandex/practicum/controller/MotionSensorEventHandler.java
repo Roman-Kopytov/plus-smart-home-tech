@@ -1,16 +1,16 @@
 package ru.yandex.practicum.controller;
 
 import org.springframework.stereotype.Component;
-import ru.yandex.practicum.config.KafkaTopicsProperties;
-import ru.yandex.practicum.service.KafkaEventProducer;
+import ru.yandex.practicum.config.KafkaProperties;
 import ru.yandex.practicum.grpc.telemetry.event.MotionSensorEvent;
 import ru.yandex.practicum.grpc.telemetry.event.SensorEventProto;
 import ru.yandex.practicum.kafka.telemetry.event.MotionSensorAvro;
+import ru.yandex.practicum.service.KafkaEventProducer;
 
 @Component
 public class MotionSensorEventHandler extends BaseSensorEventHandler<MotionSensorAvro> {
-    public MotionSensorEventHandler(KafkaEventProducer producer, KafkaTopicsProperties kafkaTopics) {
-        super(producer, kafkaTopics);
+    public MotionSensorEventHandler(KafkaEventProducer producer, KafkaProperties kafkaProperties) {
+        super(producer, kafkaProperties);
     }
 
     @Override

@@ -37,7 +37,7 @@ public class HubEventProcessor implements Runnable {
         log.info("HubEventProcessor processor started");
         Runtime.getRuntime().addShutdownHook(new Thread(consumer::wakeup));
         try {
-            consumer.subscribe(List.of(kafkaProperties.getTopics().get("telemetry-hubs")));
+            consumer.subscribe(List.of(kafkaProperties.getHubs().getTopic()));
             while (true) {
                 ConsumerRecords<String, HubEventAvro> records = consumer.poll(Duration.ofMillis(POLL_DURATION));
                 for (ConsumerRecord<String, HubEventAvro> record : records) {

@@ -1,17 +1,17 @@
 package ru.yandex.practicum.controller;
 
 import org.springframework.stereotype.Component;
-import ru.yandex.practicum.config.KafkaTopicsProperties;
-import ru.yandex.practicum.service.KafkaEventProducer;
+import ru.yandex.practicum.config.KafkaProperties;
 import ru.yandex.practicum.grpc.telemetry.event.LightSensorEvent;
 import ru.yandex.practicum.grpc.telemetry.event.SensorEventProto;
 import ru.yandex.practicum.kafka.telemetry.event.LightSensorAvro;
+import ru.yandex.practicum.service.KafkaEventProducer;
 
 @Component
 public class LightSensorEventHandler extends BaseSensorEventHandler<LightSensorAvro> {
 
-    public LightSensorEventHandler(KafkaEventProducer producer, KafkaTopicsProperties kafkaTopics) {
-        super(producer, kafkaTopics);
+    public LightSensorEventHandler(KafkaEventProducer producer, KafkaProperties kafkaProperties) {
+        super(producer, kafkaProperties);
     }
 
     @Override

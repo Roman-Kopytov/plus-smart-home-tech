@@ -15,7 +15,6 @@ import ru.yandex.practicum.kafka.telemetry.event.SensorsSnapshotAvro;
 import ru.yandex.practicum.service.AnalyzerService;
 
 import java.time.Duration;
-import java.time.temporal.TemporalUnit;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -42,7 +41,7 @@ public class SnapshotProcessor implements Runnable {
         log.info("Snapshot processor started");
         Runtime.getRuntime().addShutdownHook(new Thread(consumer::wakeup));
         try {
-            consumer.subscribe(List.of(kafkaProperties.getTopics().get("telemetry-snapshots")));
+            consumer.subscribe(List.of(kafkaProperties.getSnapshots().getTopic()));
             while (true) {
                 ConsumerRecords<String, SensorsSnapshotAvro> poll = consumer.poll(Duration.ofMillis(POLL_DURATION));
                 int count = 0;

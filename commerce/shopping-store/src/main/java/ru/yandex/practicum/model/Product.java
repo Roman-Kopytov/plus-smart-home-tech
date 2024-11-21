@@ -7,7 +7,7 @@ import ru.yandex.practicum.dto.product.ProductCategory;
 import ru.yandex.practicum.dto.product.ProductState;
 import ru.yandex.practicum.dto.product.QuantityState;
 
-@Table(name = "products",schema = "public")
+@Table(name = "products", schema = "public")
 @Getter
 @Setter
 @AllArgsConstructor

@@ -1,6 +1,5 @@
 package ru.yandex.practicum.service;
 
-import org.springframework.stereotype.Service;
 import ru.yandex.practicum.dto.product.*;
 
 import java.util.List;

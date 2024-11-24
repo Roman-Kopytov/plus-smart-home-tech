@@ -12,10 +12,10 @@ import ru.yandex.practicum.model.WarehouseProduct;
         injectionStrategy = InjectionStrategy.CONSTRUCTOR
 )
 public interface WarehouseMapper {
-    @Mapping(source = "productId", target = "product")
+    @Mapping(source = "productId", target = "productId")
     @Mapping(source = "dimension.width", target = "width")
     @Mapping(source = "dimension.height", target = "height")
     @Mapping(source = "dimension.depth", target = "depth")
-    @Mapping(target = "quantity", constant = "0")
+    @Mapping(target = "quantity", constant = "0L")
     WarehouseProduct toEntity(NewProductInWarehouseRequest request);
 }

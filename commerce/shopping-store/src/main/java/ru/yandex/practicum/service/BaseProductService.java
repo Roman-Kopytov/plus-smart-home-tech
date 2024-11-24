@@ -3,6 +3,7 @@ package ru.yandex.practicum.service;
 import ru.yandex.practicum.dto.product.*;
 
 import java.util.List;
+import java.util.UUID;
 
 public interface BaseProductService {
 
@@ -10,9 +11,9 @@ public interface BaseProductService {
 
     ProductFullDto updateProduct(ProductRequestDto productRequestDto);
 
-    boolean removeProduct(String productId);
+    boolean removeProduct(UUID productId);
 
-    ProductFullDto getProduct(String productId);
+    ProductFullDto getProduct(UUID productId);
 
     boolean setProductQuantityState(SetProductQuantityStateRequest productQuantityStateRequest);
 

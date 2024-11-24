@@ -11,8 +11,8 @@ import java.util.UUID;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-@Table(name = "shopping_cart_product")
-public class Product {
+@Table(name = "order_product")
+public class OrderProduct {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -21,6 +21,6 @@ public class Product {
     @Column(name = "count")
     private Long count;
     @ManyToOne
-    @JoinColumn(name = "shopping_cart_id", nullable = false)
-    private ShoppingCart shoppingCart;
+    @JoinColumn(name = "order_id")
+    private Order order;
 }

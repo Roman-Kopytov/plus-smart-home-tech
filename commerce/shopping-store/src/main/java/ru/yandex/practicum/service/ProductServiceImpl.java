@@ -12,6 +12,7 @@ import ru.yandex.practicum.model.Product;
 import ru.yandex.practicum.repository.ProductRepository;
 
 import java.util.List;
+import java.util.UUID;
 
 @Service
 @RequiredArgsConstructor
@@ -61,17 +62,20 @@ public class ProductServiceImpl implements BaseProductService {
 
     @Override
     @Transactional
-    public boolean removeProduct(String productId) {
-//        TODO
-        if (getProductFromRepository(productId) != null) {
-            productRepository.deleteById(productId);
-
+    public boolean removeProduct(UUID productId) {
+        Product productFromRepository;
+        try {
+            productFromRepository = getProductFromRepository(productId);
+            productFromRepository.setProductState(ProductState.DEACTIVATE);
+            productRepository.save(productFromRepository);
             return true;
-        } else return false;
+        } catch (NotFoundException e) {
+            return false;
+        }
     }
 
     @Override
-    public ProductFullDto getProduct(String productId) {
+    public ProductFullDto getProduct(UUID productId) {
         return productMapper.toProductFullDto(getProductFromRepository(productId));
     }
 
@@ -94,7 +98,7 @@ public class ProductServiceImpl implements BaseProductService {
                 .toList();
     }
 
-    private Product getProductFromRepository(String productId) {
+    private Product getProductFromRepository(UUID productId) {
         return productRepository.findById(productId).orElseThrow(() -> new NotFoundException("Product with id: " + productId + " not found"));
     }
 }

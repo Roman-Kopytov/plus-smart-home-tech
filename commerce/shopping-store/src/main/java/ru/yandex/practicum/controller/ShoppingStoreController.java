@@ -7,6 +7,7 @@ import ru.yandex.practicum.dto.product.*;
 import ru.yandex.practicum.service.BaseProductService;
 
 import java.util.List;
+import java.util.UUID;
 
 @RestController
 @RequestMapping("/api/v1/shopping-store")
@@ -34,7 +35,8 @@ public class ShoppingStoreController {
 
     @PostMapping("/removeProductFromStore")
     public boolean removeProductFromStore(@RequestBody String productId) {
-        return productService.removeProduct(productId);
+        UUID uuid = UUID.fromString(productId.trim());
+        return productService.removeProduct(uuid);
     }
 
     @PostMapping("/quantityState")
@@ -44,7 +46,7 @@ public class ShoppingStoreController {
     }
 
     @GetMapping("/{productId}")
-    public ProductFullDto getProduct(@PathVariable(name = "productId") String productId) {
+    public ProductFullDto getProduct(@PathVariable(name = "productId") UUID productId) {
         return productService.getProduct(productId);
     }
 

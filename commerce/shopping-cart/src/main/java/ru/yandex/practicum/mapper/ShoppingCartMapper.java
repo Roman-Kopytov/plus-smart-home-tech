@@ -10,6 +10,7 @@ import ru.yandex.practicum.model.ShoppingCart;
 
 import java.util.List;
 import java.util.Map;
+import java.util.UUID;
 import java.util.stream.Collectors;
 
 @Mapper(
@@ -18,14 +19,13 @@ import java.util.stream.Collectors;
 )
 public interface ShoppingCartMapper {
     //TODO
-    @Mapping(source = "id", target = "shoppingCartId")
+    @Mapping(source = "shoppingCartId", target = "shoppingCartId")
     @Mapping(target = "products", expression = "java(mapProductsToMap(cart.getProducts()))")
     ShoppingCartDto toDto(ShoppingCart cart);
 
-    default Map<String, Long> mapProductsToMap(List<Product> products) {
+    default Map<UUID, Long> mapProductsToMap(List<Product> products) {
         return products.stream()
                 .collect(Collectors.toMap(Product::getProductId, Product::getCount));
     }
 
-    ShoppingCart toEntity(ShoppingCartDto shoppingCartDto);
 }

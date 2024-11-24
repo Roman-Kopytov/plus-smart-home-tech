@@ -8,6 +8,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.util.Map;
+import java.util.UUID;
 
 @Data
 @AllArgsConstructor
@@ -15,7 +16,7 @@ import java.util.Map;
 @Builder
 public class ShoppingCartDto {
     @NotNull
-    private String shoppingCartId;
+    private UUID shoppingCartId;
     @NotEmpty
-    private Map<String, Long> products;
+    private Map<UUID, Long> products;
 }

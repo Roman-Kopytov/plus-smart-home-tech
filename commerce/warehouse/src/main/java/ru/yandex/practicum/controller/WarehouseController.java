@@ -22,7 +22,7 @@ public class WarehouseController {
 
     @PutMapping
     public void addNewProductInWarehouse(@Valid @RequestBody NewProductInWarehouseRequest newProduct) {
-        return warehouseService.addNewProduct(newProduct);
+        warehouseService.addNewProduct(newProduct);
     }
 
     @PostMapping("/return")
@@ -44,8 +44,8 @@ public class WarehouseController {
     }
 
     @PostMapping("/add")
-    public boolean addProductToWarehouse(@Valid @RequestBody AddProductToWarehouseRequest product) {
-        return warehouseService.increaseProductCount(product);
+    public void addProductToWarehouse(@Valid @RequestBody AddProductToWarehouseRequest product) {
+        warehouseService.increaseProductCount(product);
     }
 
     @GetMapping("/address")

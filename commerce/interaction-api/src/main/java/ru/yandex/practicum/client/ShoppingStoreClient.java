@@ -8,6 +8,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import ru.yandex.practicum.dto.product.ProductFullDto;
 import ru.yandex.practicum.dto.product.SetProductQuantityStateRequest;
 
+import java.util.UUID;
+
 @FeignClient(name = "shopping-store")
 public interface ShoppingStoreClient {
     @PostMapping("/api/v1/shopping-store/quantityState")
@@ -15,6 +17,6 @@ public interface ShoppingStoreClient {
             (@RequestBody SetProductQuantityStateRequest setProductQuantityStateRequest);
 
     @GetMapping("/{productId}")
-    ProductFullDto getProduct(@PathVariable(name = "productId") String productId);
+    ProductFullDto getProduct(@PathVariable(name = "productId") UUID productId);
 
 }

@@ -7,6 +7,8 @@ import ru.yandex.practicum.dto.product.ProductCategory;
 import ru.yandex.practicum.dto.product.ProductState;
 import ru.yandex.practicum.dto.product.QuantityState;
 
+import java.util.UUID;
+
 @Table(name = "products", schema = "public")
 @Getter
 @Setter
@@ -19,7 +21,7 @@ public class Product {
 
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
-    private String productId;
+    private UUID productId;
     private String productName;
     private String description;
     private String imageSrc;

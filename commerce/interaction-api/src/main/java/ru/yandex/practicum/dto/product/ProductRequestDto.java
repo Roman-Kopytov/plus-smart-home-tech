@@ -7,11 +7,13 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.UUID;
+
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
 public class ProductRequestDto {
-    private String productId;
+    private UUID productId;
     @NotNull
     private String productName;
     @NotNull

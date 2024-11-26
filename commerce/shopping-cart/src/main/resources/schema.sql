@@ -9,7 +9,7 @@ CREATE TABLE IF NOT EXISTS shopping_cart
 
 CREATE TABLE IF NOT EXISTS shopping_cart_product
 (
-    id               bigint GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
+    id               UUID DEFAULT gen_random_uuid() PRIMARY KEY,
     product_id       UUID,
     count            BIGINT,
     shopping_cart_id UUID,

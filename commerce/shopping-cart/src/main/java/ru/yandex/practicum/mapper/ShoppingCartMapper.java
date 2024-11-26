@@ -5,7 +5,7 @@ import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.MappingConstants;
 import ru.yandex.practicum.dto.cart.ShoppingCartDto;
-import ru.yandex.practicum.model.Product;
+import ru.yandex.practicum.model.ProductCart;
 import ru.yandex.practicum.model.ShoppingCart;
 
 import java.util.List;
@@ -18,14 +18,13 @@ import java.util.stream.Collectors;
         injectionStrategy = InjectionStrategy.CONSTRUCTOR
 )
 public interface ShoppingCartMapper {
-    //TODO
     @Mapping(source = "shoppingCartId", target = "shoppingCartId")
     @Mapping(target = "products", expression = "java(mapProductsToMap(cart.getProducts()))")
     ShoppingCartDto toDto(ShoppingCart cart);
 
-    default Map<UUID, Long> mapProductsToMap(List<Product> products) {
+    default Map<UUID, Long> mapProductsToMap(List<ProductCart> products) {
         return products.stream()
-                .collect(Collectors.toMap(Product::getProductId, Product::getCount));
+                .collect(Collectors.toMap(ProductCart::getProductId, ProductCart::getCount));
     }
 
 }

@@ -12,10 +12,10 @@ import java.util.UUID;
 @NoArgsConstructor
 @Builder
 @Table(name = "shopping_cart_product")
-public class Product {
+public class ProductCart {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    @GeneratedValue(strategy = GenerationType.UUID)
+    private UUID id;
     @Column(name = "product_id")
     private UUID productId;
     @Column(name = "count")

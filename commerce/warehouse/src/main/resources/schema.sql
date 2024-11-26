@@ -13,31 +13,31 @@ CREATE TABLE IF NOT EXISTS warehouse_product
 
 CREATE TABLE IF NOT EXISTS booking
 (
-    booking_id       INT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
+    booking_id       UUID DEFAULT gen_random_uuid() PRIMARY KEY,
     shopping_cart_id UUID NOT NULL
 );
 
 CREATE TABLE IF NOT EXISTS booking_product
 (
-    id         bigint GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
+    id         UUID DEFAULT gen_random_uuid() PRIMARY KEY,
     product_id UUID,
     count      BIGINT,
-    booking_id INT NOT NULL,
+    booking_id UUID NOT NULL,
     CONSTRAINT fk_product FOREIGN KEY (booking_id) REFERENCES booking (booking_id) ON DELETE CASCADE
 );
 
 CREATE TABLE IF NOT EXISTS "order"
 (
-    order_id         INT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
+    order_id         UUID DEFAULT gen_random_uuid() PRIMARY KEY,
     shopping_cart_id UUID NOT NULL
 );
 
 CREATE TABLE IF NOT EXISTS "order_product"
 (
-    id         BIGINT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
+    id         UUID DEFAULT gen_random_uuid() PRIMARY KEY,
     product_id UUID,
     count      BIGINT,
-    order_id   INT NOT NULL,
+    order_id   UUID NOT NULL,
     CONSTRAINT fk_product FOREIGN KEY (order_id) REFERENCES "order" (order_id) ON DELETE CASCADE
 );
 

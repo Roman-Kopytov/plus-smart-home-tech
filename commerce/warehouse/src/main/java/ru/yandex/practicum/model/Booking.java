@@ -15,8 +15,8 @@ import java.util.UUID;
 @Table(name = "booking")
 public class Booking {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int bookingId;
+    @GeneratedValue(strategy = GenerationType.UUID)
+    private UUID bookingId;
     @Column(name = "shopping_cart_id")
     private UUID shoppingCartId;
 

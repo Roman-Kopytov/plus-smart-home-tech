@@ -20,7 +20,7 @@ public class ShoppingCart {
     @Column(name = "username")
     private String username;
     @OneToMany(mappedBy = "shoppingCart", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<Product> products;
+    private List<ProductCart> products;
     @Enumerated(EnumType.STRING)
     @Column(name = "status")
     private ShoppingCartStatus status;

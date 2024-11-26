@@ -14,8 +14,8 @@ import java.util.UUID;
 @Table(name = "order_product")
 public class OrderProduct {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    @GeneratedValue(strategy = GenerationType.UUID)
+    private UUID id;
     @Column(name = "product_id")
     private UUID productId;
     @Column(name = "count")

@@ -1,0 +1,39 @@
+package ru.yandex.practicum.client;
+
+
+import org.springframework.cloud.openfeign.FeignClient;
+import org.springframework.web.bind.annotation.*;
+import ru.yandex.practicum.dto.cart.BookedProductsDto;
+import ru.yandex.practicum.dto.cart.ChangeProductQuantityRequest;
+import ru.yandex.practicum.dto.cart.ShoppingCartDto;
+
+import java.util.List;
+import java.util.Map;
+import java.util.UUID;
+
+@FeignClient(name = "shopping-cart")
+public interface ShoppingCartClient {
+    @GetMapping
+    public ShoppingCartDto getShoppingCart(@RequestParam String username);
+
+    @PutMapping
+    public ShoppingCartDto addProductToShoppingCart(@RequestParam String username,
+                                                    @RequestBody Map<UUID, Long> products);
+
+
+    @DeleteMapping
+    public void deactivateShoppingCart(@RequestParam String username);
+
+    @PostMapping("/remove")
+    public ShoppingCartDto removeProductsFromCart(@RequestParam String username,
+                                                  @RequestBody List<UUID> products);
+
+
+    @PostMapping("/change-quantity")
+    public ShoppingCartDto changeProductQuantityInCart(@RequestParam String username,
+                                                       @RequestBody ChangeProductQuantityRequest request);
+
+    @PostMapping("/booking")
+    public BookedProductsDto bookingProductsInWarehouse(@RequestParam String username);
+
+}

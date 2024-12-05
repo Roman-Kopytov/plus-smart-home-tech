@@ -2,21 +2,21 @@ package ru.yandex.practicum.service;
 
 import ru.yandex.practicum.dto.cart.BookedProductsDto;
 import ru.yandex.practicum.dto.cart.ShoppingCartDto;
-import ru.yandex.practicum.dto.warehouse.AddProductToWarehouseRequest;
-import ru.yandex.practicum.dto.warehouse.AddressDto;
-import ru.yandex.practicum.dto.warehouse.AssemblyProductForOrderFromShoppingCartRequest;
-import ru.yandex.practicum.dto.warehouse.NewProductInWarehouseRequest;
+import ru.yandex.practicum.dto.warehouse.*;
 
 import java.util.Map;
+import java.util.UUID;
 
 public interface WarehouseService {
     void addNewProduct(NewProductInWarehouseRequest newProduct);
 
-    void addReturnProduct(Map<String, Long> products);
+    void shippedToDelivery(ShippedToDeliveryRequest deliveryRequest);
 
-    BookedProductsDto bookProducts(ShoppingCartDto shoppingCartDto);
+    void addReturnProduct(Map<UUID, Long> products);
 
-    BookedProductsDto createAssembly(AssemblyProductForOrderFromShoppingCartRequest assembly);
+    BookedProductsDto checkProductCount(ShoppingCartDto shoppingCartDto);
+
+    BookedProductsDto createAssembly(AssemblyProductsForOrderRequest assembly);
 
     void increaseProductCount(AddProductToWarehouseRequest product);
 

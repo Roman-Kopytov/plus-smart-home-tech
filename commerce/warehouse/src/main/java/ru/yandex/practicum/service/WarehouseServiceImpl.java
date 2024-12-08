@@ -8,7 +8,6 @@ import ru.yandex.practicum.dto.cart.BookedProductsDto;
 import ru.yandex.practicum.dto.cart.ShoppingCartDto;
 import ru.yandex.practicum.dto.warehouse.*;
 import ru.yandex.practicum.exception.ProductInShoppingCartLowQuantityInWarehouse;
-import ru.yandex.practicum.mapper.BookingMapper;
 import ru.yandex.practicum.mapper.WarehouseMapper;
 import ru.yandex.practicum.model.BookingProduct;
 import ru.yandex.practicum.model.OrderBooking;
@@ -27,7 +26,6 @@ public class WarehouseServiceImpl implements WarehouseService {
     private final WarehouseRepository warehouseRepository;
     private final WarehouseMapper warehouseMapper;
     private final BookingRepository bookingRepository;
-    private final BookingMapper bookingMapper;
     private static final String[] ADDRESSES =
             new String[]{"ADDRESS_1", "ADDRESS_2"};
 
@@ -59,33 +57,40 @@ public class WarehouseServiceImpl implements WarehouseService {
     @Transactional
     @Override
     public BookedProductsDto checkProductCount(ShoppingCartDto shoppingCartDto) {
-        checkQuantity(shoppingCartDto.getProducts());
-
-       /* не понимаю зачем возвращать BookedProductsDto если согласно API и заданию мы делаем сборку и потом передаем BookedProductsDto
-      зедсь просто проверяем, также не понятно в каком формате нужно возвращать -
-        "Если товаров недостаточно, пользователь должен понять, каких именно из них не хватает."*/
-        return new BookedProductsDto();
-    }
-
-    private boolean checkQuantity(Map<UUID, Long> products) {
+        Map<UUID, Long> products = shoppingCartDto.getProducts();
+        double deliveryWeight = 0;
+        double deliveryVolume = 0;
+        boolean fragile = false;
         List<WarehouseProduct> allById = warehouseRepository.findAllById(products.keySet());
         Map<UUID, WarehouseProduct> productById = allById.stream().collect(Collectors.toMap(WarehouseProduct::getProductId, Function.identity()));
         List<UUID> lowQuantityProduct = new ArrayList<>();
-        boolean passCheck = true;
         for (Map.Entry<UUID, Long> entry : products.entrySet()) {
             Long needQuantity = entry.getValue();
             UUID productId = entry.getKey();
             Long existQuantity = productById.get(productId).getQuantity();
             if (needQuantity > existQuantity) {
                 lowQuantityProduct.add(productId);
-                passCheck = false;
             }
+            WarehouseProduct warehouseProduct = productById.get(productId);
+            if (warehouseProduct.getFragile()) {
+                fragile = true;
+            }
+            deliveryWeight = deliveryWeight + warehouseProduct.getWeight() * needQuantity;
+
+            deliveryVolume = deliveryVolume + needQuantity
+                    + (warehouseProduct.getDepth() * warehouseProduct.getWidth() * warehouseProduct.getHeight());
         }
-        if (!passCheck) {
+        if (lowQuantityProduct.isEmpty()) {
             throw new ProductInShoppingCartLowQuantityInWarehouse("Ошибка, товары " + lowQuantityProduct + " из корзины не находится в требуемом количестве на складе");
         }
-        return passCheck;
+
+        return BookedProductsDto.builder()
+                .deliveryVolume(deliveryVolume)
+                .deliveryWeight(deliveryWeight)
+                .fragile(fragile)
+                .build();
     }
+
 
     @Transactional
     @Override
@@ -151,8 +156,7 @@ public class WarehouseServiceImpl implements WarehouseService {
     }
 
     private WarehouseProduct getWarehouseProductFromRepository(UUID productId) {
-        WarehouseProduct product = warehouseRepository.findById(productId)
+        return warehouseRepository.findById(productId)
                 .orElseThrow(() -> new NotFoundException("Product by id: " + productId + " not found"));
-        return product;
     }
 }

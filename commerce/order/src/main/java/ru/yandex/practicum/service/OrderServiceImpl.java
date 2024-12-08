@@ -42,11 +42,6 @@ public class OrderServiceImpl implements OrderService {
 
     @Override
     public OrderDto getOrders(String username) {
-/*       Коментарий наставника
-        Поле можно сделать.
-        Но в текущей постановке ТЗ, оно не будет использоваться
-        Получить можно только отойдя от задания и изменив API
-        */
         return null;
     }
 
@@ -191,9 +186,6 @@ public class OrderServiceImpl implements OrderService {
         Double deliveryCost = deliveryClient.calculateFullDeliveryCost(dto);
         order.setDeliveryPrice(deliveryCost);
         Order saved = orderRepository.save(order);
-//        можно ли  не пользоваться маппером два раза, а уже у существующего dto поменять DeliveryPrice?
-//        или нам гарантировано надо знать что поле обновилось? По идее transactional нам дает гарантию в случае ошибки
-//        то что метод save не обязателен здесь - я знаю
         return orderMapper.toDto(saved);
     }
 

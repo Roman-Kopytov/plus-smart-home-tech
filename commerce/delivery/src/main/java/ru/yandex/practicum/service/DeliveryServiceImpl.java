@@ -79,8 +79,6 @@ public class DeliveryServiceImpl implements DeliveryService {
     @Transactional
     @Override
     public void failedDelivery(UUID orderId) {
-//        Здесь и не только не очень понтяно. Если мы поставим статус доставки failed, но поймаем ошибку в orderClient
-//        то транзакция откатится, и мы не запомним этот статус
         Delivery delivery = getDeliveryFromRepository(orderId);
         try {
             orderClient.deliveryFailedOrder(orderId);
@@ -94,7 +92,7 @@ public class DeliveryServiceImpl implements DeliveryService {
     @Override
     public Double calculateFullDeliveryCost(OrderDto orderDto) {
         Delivery delivery = getDeliveryFromRepository(orderDto.getDeliveryId());
-        Double deliveryCost = 5.0;
+        double deliveryCost = 5.0;
 
         if (delivery.getFromAddress().getCity().equals(ADDRESS_1)) {
             deliveryCost = deliveryCost * 1;

@@ -18,6 +18,7 @@ public class Payment {
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
     private UUID paymentId;
+    private UUID orderId;
 
     private Double totalPrice;
     private Double deliveryPrice;

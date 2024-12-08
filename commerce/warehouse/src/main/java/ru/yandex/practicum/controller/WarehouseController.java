@@ -5,13 +5,11 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 import ru.yandex.practicum.dto.cart.BookedProductsDto;
 import ru.yandex.practicum.dto.cart.ShoppingCartDto;
-import ru.yandex.practicum.dto.warehouse.AddProductToWarehouseRequest;
-import ru.yandex.practicum.dto.warehouse.AddressDto;
-import ru.yandex.practicum.dto.warehouse.AssemblyProductForOrderFromShoppingCartRequest;
-import ru.yandex.practicum.dto.warehouse.NewProductInWarehouseRequest;
+import ru.yandex.practicum.dto.warehouse.*;
 import ru.yandex.practicum.service.WarehouseService;
 
 import java.util.Map;
+import java.util.UUID;
 
 @RestController
 @RequestMapping("/api/v1/warehouse")
@@ -25,21 +23,26 @@ public class WarehouseController {
         warehouseService.addNewProduct(newProduct);
     }
 
+    @PostMapping("/shipped")
+    public void shippedToDelivery(@Valid @RequestBody ShippedToDeliveryRequest deliveryRequest) {
+        warehouseService.shippedToDelivery(deliveryRequest);
+    }
+
     @PostMapping("/return")
-    public void addReturnProductInWarehouse(Map<String, Long> products) {
+    public void addReturnProductInWarehouse(Map<UUID, Long> products) {
         warehouseService.addReturnProduct(products);
     }
 
-    @PostMapping("/booking")
+    @PostMapping("/check")
     public BookedProductsDto bookProductsInWarehouse(@Valid @RequestBody ShoppingCartDto shoppingCartDto) {
-        return warehouseService.bookProducts(shoppingCartDto);
+        return warehouseService.checkProductCount(shoppingCartDto);
     }
 
     @PostMapping("/assembly")
     public BookedProductsDto createAssembly(
             @Valid
             @RequestBody
-            AssemblyProductForOrderFromShoppingCartRequest assembly) {
+            AssemblyProductsForOrderRequest assembly) {
         return warehouseService.createAssembly(assembly);
     }
 

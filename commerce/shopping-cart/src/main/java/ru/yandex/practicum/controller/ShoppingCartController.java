@@ -17,34 +17,34 @@ import java.util.UUID;
 public class ShoppingCartController {
     private final ShoppingCartService shoppingCartService;
 
-    @GetMapping("/api/v1/shopping-cart")
+    @GetMapping
     public ShoppingCartDto getShoppingCart(@RequestParam String username) {
         return shoppingCartService.getShoppingCart(username);
     }
 
-    @PutMapping("/api/v1/shopping-cart")
+    @PutMapping
     public ShoppingCartDto addProductToShoppingCart(@RequestParam String username,
                                                     @RequestBody Map<UUID, Long> products) {
         return shoppingCartService.addProductsToShoppingCart(username, products);
     }
 
-    @DeleteMapping("/api/v1/shopping-cart")
+    @DeleteMapping
     public void deactivateShoppingCart(@RequestParam String username) {
         shoppingCartService.deactivateShoppingCart(username);
     }
 
-    @PostMapping("/api/v1/shopping-cart/remove")
+    @PostMapping("/remove")
     public ShoppingCartDto removeProductsFromCart(@RequestParam String username,
                                                   @RequestBody List<UUID> products) {
         return shoppingCartService.removeProducts(username, products);
     }
 
-    @PostMapping("/api/v1/shopping-cart/change-quantity")
+    @PostMapping("/change-quantity")
     public ShoppingCartDto changeProductQuantityInCart(@RequestParam String username, @RequestBody ChangeProductQuantityRequest request) {
         return shoppingCartService.changeProductQuantity(username, request);
     }
 
-    @PostMapping("/api/v1/shopping-cart/booking")
+    @PostMapping("/booking")
     public BookedProductsDto bookingProductsInWarehouse(@RequestParam String username) {
         return shoppingCartService.bookProducts(username);
     }

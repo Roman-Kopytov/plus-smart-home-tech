@@ -1,3 +1,5 @@
+DROP SCHEMA public CASCADE;
+CREATE SCHEMA public;
 CREATE EXTENSION IF NOT EXISTS "pgcrypto";
 
 CREATE TABLE IF NOT EXISTS warehouse_product
@@ -14,7 +16,8 @@ CREATE TABLE IF NOT EXISTS warehouse_product
 CREATE TABLE IF NOT EXISTS booking
 (
     booking_id       UUID DEFAULT gen_random_uuid() PRIMARY KEY,
-    shopping_cart_id UUID NOT NULL
+    order_id UUID NOT NULL,
+    delivery_id UUID NOT NULL
 );
 
 CREATE TABLE IF NOT EXISTS booking_product

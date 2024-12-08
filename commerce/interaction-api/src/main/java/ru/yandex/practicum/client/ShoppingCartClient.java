@@ -14,26 +14,26 @@ import java.util.UUID;
 @FeignClient(name = "shopping-cart")
 public interface ShoppingCartClient {
     @GetMapping
-    public ShoppingCartDto getShoppingCart(@RequestParam String username);
+    ShoppingCartDto getShoppingCart(@RequestParam String username);
 
     @PutMapping
-    public ShoppingCartDto addProductToShoppingCart(@RequestParam String username,
-                                                    @RequestBody Map<UUID, Long> products);
+    ShoppingCartDto addProductToShoppingCart(@RequestParam String username,
+                                             @RequestBody Map<UUID, Long> products);
 
 
     @DeleteMapping
-    public void deactivateShoppingCart(@RequestParam String username);
+    void deactivateShoppingCart(@RequestParam String username);
 
     @PostMapping("/remove")
-    public ShoppingCartDto removeProductsFromCart(@RequestParam String username,
-                                                  @RequestBody List<UUID> products);
+    ShoppingCartDto removeProductsFromCart(@RequestParam String username,
+                                           @RequestBody List<UUID> products);
 
 
     @PostMapping("/change-quantity")
-    public ShoppingCartDto changeProductQuantityInCart(@RequestParam String username,
-                                                       @RequestBody ChangeProductQuantityRequest request);
+    ShoppingCartDto changeProductQuantityInCart(@RequestParam String username,
+                                                @RequestBody ChangeProductQuantityRequest request);
 
     @PostMapping("/booking")
-    public BookedProductsDto bookingProductsInWarehouse(@RequestParam String username);
+    BookedProductsDto bookingProductsInWarehouse(@RequestParam String username);
 
 }

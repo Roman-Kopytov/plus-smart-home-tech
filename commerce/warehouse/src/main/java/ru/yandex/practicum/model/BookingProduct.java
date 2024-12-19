@@ -22,5 +22,5 @@ public class BookingProduct {
     private Long count;
     @ManyToOne
     @JoinColumn(name = "booking_id")
-    private Booking booking;
+    private OrderBooking booking;
 }
